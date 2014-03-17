@@ -20,6 +20,7 @@ import org.testng.annotations.Test;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 import static org.testng.Assert.assertEquals;
 
@@ -54,11 +55,16 @@ public class SampleSauceTest implements SauceOnDemandSessionIdProvider, SauceOnD
      * @param testMethod
      * @return
      */
-    @DataProvider(name = "hardCodedBrowsers", parallel = true)
+    @DataProvider(name = "hardCodedBrowsers", parallel = false)
     public static Object[][] sauceBrowserDataProvider(Method testMethod) {
         return new Object[][]{
                 new Object[]{"internet explorer", "11", "Windows 8.1"},
-                new Object[]{"safari", "6", "OSX 10.8"},
+                new Object[]{"internet explorer", "10", "Windows 8"},
+                new Object[]{"safari", "7", "OS X 10.9"},
+                new Object[]{"chrome", "beta", "Windows XP"},
+                new Object[]{"chrome", "30", "Windows 8"},
+
+
                 //new Object[]{"safari", "6", "OSX 10.8"},
                 //new Object[]{"safari", "6", "OSX 10.8"},
         };
@@ -90,7 +96,6 @@ public class SampleSauceTest implements SauceOnDemandSessionIdProvider, SauceOnD
         capabilities.setCapability("name", "Sauce Sample Test");
 
         /*
-
         DesiredCapabilities caps = DesiredCapabilities.android();
         caps.setCapability("platform", "Linux");
         caps.setCapability("version", "4.3");
@@ -109,16 +114,6 @@ public class SampleSauceTest implements SauceOnDemandSessionIdProvider, SauceOnD
 
 
 
-    /*
-    DesiredCapabilities caps = DesiredCapabilities.android();
-    caps.setCapability("platform", "Linux");
-    caps.setCapability("version", "4.3");
-    caps.setCapability("device-type", "tablet");
-    caps.setCapability("device-orientation", "portrait");
-
-    */
-
-
 
     /**
      * Runs a simple test verifying the title of the amazon.com homepage.
@@ -135,6 +130,7 @@ public class SampleSauceTest implements SauceOnDemandSessionIdProvider, SauceOnD
         String baseUrl = "boroughs.tfl.gov.uk";
         //String baseUrl = "www.amazon.com";
         driver.get(baseUrl);
+        driver.manage().timeouts().pageLoadTimeout(200, TimeUnit.SECONDS);
 
         driver.get(baseUrl + "/tfl/login.aspx?returnurl=%2fdefault.aspx");
 
