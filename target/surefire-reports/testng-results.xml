@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" total="2" passed="2">
+  <reporter-output>
+  </reporter-output>
+  <suite name="com.saucelabs.SampleSauceTest" duration-ms="22014" started-at="2014-03-14T15:15:00Z" finished-at="2014-03-14T15:15:22Z">
+    <groups>
+    </groups>
+    <test name="Command line test" duration-ms="22014" started-at="2014-03-14T15:15:00Z" finished-at="2014-03-14T15:15:22Z">
+      <class name="com.saucelabs.SampleSauceTest">
+        <test-method status="PASS" signature="webDriver(java.lang.String, java.lang.String, java.lang.String)" name="webDriver" duration-ms="21680" started-at="2014-03-14T15:15:00Z" finished-at="2014-03-14T15:15:22Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[safari]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[6]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[OSX 10.8]]>
+              </value>
+            </param>
+          </params>
+        </test-method>
+        <test-method status="PASS" signature="webDriver(java.lang.String, java.lang.String, java.lang.String)" name="webDriver" duration-ms="18150" started-at="2014-03-14T15:15:00Z" finished-at="2014-03-14T15:15:18Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[internet explorer]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[11]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Windows 8.1]]>
+              </value>
+            </param>
+          </params>
+        </test-method>
+      </class>
+    </test>
+  </suite>
+</testng-results>
