@@ -56,17 +56,18 @@ public class SampleSauceTest implements SauceOnDemandSessionIdProvider, SauceOnD
      * @return
      */
     @DataProvider(name = "hardCodedBrowsers", parallel = false)
-    public static Object[][] sauceBrowserDataProvider(Method testMethod) {
+        public static Object[][] sauceBrowserDataProvider(Method testMethod) {
         return new Object[][]{
-                new Object[]{"internet explorer", "11", "Windows 8.1"},
-                new Object[]{"internet explorer", "10", "Windows 8"},
-                new Object[]{"safari", "7", "OS X 10.9"},
-                new Object[]{"chrome", "beta", "Windows XP"},
+                //Working:
+                //new Object[]{"internet explorer", "11", "Windows 8.1"},
+                //new Object[]{"internet explorer", "10", "Windows 8"},
+                //new Object[]{"firefox", "25", "Windows 8.1"},
                 //new Object[]{"chrome", "30", "Windows 8"},
 
+                //Not working:
 
-                //new Object[]{"safari", "6", "OSX 10.8"},
-                //new Object[]{"safari", "6", "OSX 10.8"},
+                // Unknown:
+                new Object[]{"safari", "6", "OSX 10.8"},
         };
     }
 
@@ -127,12 +128,14 @@ public class SampleSauceTest implements SauceOnDemandSessionIdProvider, SauceOnD
     public void checkMicroSitesBoroughs(String browser, String version, String os) throws Exception {
 
         WebDriver driver = createDriver(browser, version, os);
-        String baseUrl = "boroughs.tfl.gov.uk";
+        String baseUrl = "http://boroughs.tfl.gov.uk";
         //String baseUrl = "www.amazon.com";
         driver.get(baseUrl);
         driver.manage().timeouts().pageLoadTimeout(200, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS);
 
-        driver.get(baseUrl + "/tfl/login.aspx?returnurl=%2fdefault.aspx");
+
+        //driver.get(baseUrl + "/tfl/login.aspx?returnurl=%2fdefault.aspx");
 
         driver.findElement(By.id("TfLLogin_txt_email")).clear();
         driver.findElement(By.id("TfLLogin_txt_email")).sendKeys("jasonpitter@tfl.gov.uk");
