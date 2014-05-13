@@ -55,19 +55,26 @@ public class SampleSauceTest implements SauceOnDemandSessionIdProvider, SauceOnD
      * @param testMethod
      * @return
      */
-    @DataProvider(name = "hardCodedBrowsers", parallel = false)
+    @DataProvider(name = "hardCodedBrowsers", parallel = true)
         public static Object[][] sauceBrowserDataProvider(Method testMethod) {
         return new Object[][]{
                 //Working:
-                //new Object[]{"internet explorer", "11", "Windows 8.1"},
-                //new Object[]{"internet explorer", "10", "Windows 8"},
-                //new Object[]{"firefox", "25", "Windows 8.1"},
-                //new Object[]{"chrome", "30", "Windows 8"},
+                new Object[]{"internet explorer", "11", "Windows 8.1"},
+                new Object[]{"internet explorer", "10", "Windows 8"},
+                new Object[]{"firefox", "25", "Windows 8.1"},
+                new Object[]{"chrome", "30", "Windows 8"},
+                new Object[]{"firefox", "6", "OSX 10.9"},
+                new Object[]{"opera", "12", "linux"},
+                new Object[]{"android", "4.3", "android"},
+
+                // Failing
+                //new Object[]{"firefox", "18", "Windows XP"},
 
                 //Not working:
+                //new Object[]{"safari", "6", "OSX 10.8"},
+                //new Object[]{"safari", "7", "OSX 10.9"},
 
                 // Unknown:
-                new Object[]{"safari", "6", "OSX 10.8"},
         };
     }
 
@@ -94,25 +101,25 @@ public class SampleSauceTest implements SauceOnDemandSessionIdProvider, SauceOnD
             capabilities.setCapability(CapabilityType.VERSION, version);
         }
         capabilities.setCapability(CapabilityType.PLATFORM, os);
-        capabilities.setCapability("name", "Sauce Sample Test");
+        capabilities.setCapability("name", "TfL Microsites");
+
+
 
         /*
-        DesiredCapabilities caps = DesiredCapabilities.android();
-        caps.setCapability("platform", "Linux");
-        caps.setCapability("version", "4.3");
-        caps.setCapability("device-type", "tablet");
+        DesiredCapabilities caps = DesiredCapabilities.iphone();
+        caps.setCapability("platform", "OS X 10.9");
+        caps.setCapability("version", "7");
         caps.setCapability("device-orientation", "portrait");
         */
-
 
 
         webDriver.set(new RemoteWebDriver(
                 new URL("http://" + authentication.getUsername() + ":" + authentication.getAccessKey() + "@ondemand.saucelabs.com:80/wd/hub"),
                 capabilities));
+                //caps));
         sessionId.set(((RemoteWebDriver) getWebDriver()).getSessionId().toString());
         return webDriver.get();
     }
-
 
 
 
@@ -129,7 +136,6 @@ public class SampleSauceTest implements SauceOnDemandSessionIdProvider, SauceOnD
 
         WebDriver driver = createDriver(browser, version, os);
         String baseUrl = "http://boroughs.tfl.gov.uk";
-        //String baseUrl = "www.amazon.com";
         driver.get(baseUrl);
         driver.manage().timeouts().pageLoadTimeout(200, TimeUnit.SECONDS);
         driver.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS);
@@ -158,34 +164,25 @@ public class SampleSauceTest implements SauceOnDemandSessionIdProvider, SauceOnD
     }
 
 
+    @Test(dataProvider = "hardCodedBrowsers")
+    public void checkLive(String browser, String version, String os) throws Exception {
 
+        WebDriver driver = createDriver(browser, version, os);
+        String baseUrl = "http://www.tfl.gov.uk";
+        driver.get(baseUrl);
+        driver.manage().timeouts().pageLoadTimeout(200, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS);
 
+        driver.get(baseUrl + "/");
+        driver.findElement(By.id("From")).clear();
+        driver.findElement(By.id("From")).sendKeys("archway");
+        driver.findElement(By.id("To")).clear();
+        driver.findElement(By.id("To")).sendKeys("shadwell");
+        driver.findElement(By.cssSelector("input.primary-button.plan-journey-button")).click();
+        driver.findElement(By.cssSelector("span.place-name")).click();
+        driver.findElement(By.cssSelector("#disambiguation-options-to > li.disambiguation-option > a.disambiguation-link.clearfix > span.place-name")).click();
+        driver.quit();
 
-    @Test
-    public void checkMicroSiteBoroughs () {
-
-        /*
-        baseUrl = "boroughs.tfl.gov.uk";
-        driver.get(baseUrl + "/tfl/login.aspx?returnurl=%2fdefault.aspx");
-
-        driver.findElement(By.id("TfLLogin_txt_email")).clear();
-        driver.findElement(By.id("TfLLogin_txt_email")).sendKeys("jasonpitter@tfl.gov.uk");
-        driver.findElement(By.id("TfLLogin_txt_password")).clear();
-        driver.findElement(By.id("TfLLogin_txt_password")).sendKeys("password");
-        driver.findElement(By.cssSelector("INPUT#TfLLogin_btn_login.button-default-2")).click();
-
-        driver.findElement(By.linkText("Borough and regional information")).click();
-        driver.findElement(By.linkText("Local Implementation Plans")).click();
-        driver.findElement(By.linkText("News and events")).click();
-        driver.findElement(By.linkText("Contact us")).click();
-        driver.findElement(By.linkText("Staff directory")).click();
-        driver.findElement(By.id("q")).clear();
-        driver.findElement(By.id("q")).sendKeys("staff");
-        driver.findElement(By.cssSelector("input.but_go")).click();
-        // End of Boroughs
-
-        Assert.assertEquals("Staff directory | Transport for London Boroughs", driver.getTitle());
-        */
 
     }
 
